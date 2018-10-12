@@ -1,0 +1,9 @@
+LOADI r1 #97
+LOADI r2 #2
+LOADI r3 #2
+LOADI r4 #5
+ADD r5 r3 r4
+ADD r6 r2 r5
+STORE  r6
+LOADI r7 #97
+WRITE 
