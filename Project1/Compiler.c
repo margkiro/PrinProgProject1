@@ -97,7 +97,7 @@ static int variable()
 		exit(EXIT_FAILURE);
 	}
 	reg = next_register();
-	CodeGen(LOADI, reg, token, EMPTY_FIELD);
+	CodeGen(LOAD, reg, token, EMPTY_FIELD);
 	next_token();
 	return reg;
 	/* YOUR CODE GOES HERE */
@@ -155,25 +155,18 @@ static int expr()
 
 static void assign()
 {
-	int reg, left_reg, var;
-	switch(token) {
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-		var = variable();
-		switch(token) {
-			case '=':
-				next_token();
-				reg = expr();
-				CodeGen(STORE, var, reg, EMPTY_FIELD);
-				return;
-			default:
-				ERROR("Symbol %c unknown\n", token);
-				exit(EXIT_FAILURE);
+	int reg;
+	char var;
+	if(is_identifier(token)){
+		var = token;
+		next_token();
+		if(token=='='){
+			next_token();
+			reg = expr();
+			CodeGen(STORE, var, reg, EMPTY_FIELD);
+			return;
 		}
-	default:
+	}else{
 		ERROR("Symbol %c unknown\n", token);
 		exit(EXIT_FAILURE);
 	}
@@ -183,35 +176,39 @@ static void assign()
 
 static void read()
 {
-	int var;
-	switch(token){
-	case '!':
+	if(token=='!'){
 		next_token();
-		var = variable();
-		CodeGen(READ, var, EMPTY_FIELD, EMPTY_FIELD);
-		return;
-	default:
+		if(is_identifier(token)){
+			CodeGen(READ, token, EMPTY_FIELD, EMPTY_FIELD);
+			next_token();
+			return;
+		}else{
+			ERROR("Symbol %c unknown\n", token);
+			exit(EXIT_FAILURE);
+		}
+	}else{
 		ERROR("Symbol %c unknown\n", token);
 		exit(EXIT_FAILURE);
 	}
-
 
 	/* YOUR CODE GOES HERE */
 }
 
 static void print()
 {
-	int var;
-
-	switch(token){
-		case '#':
+	if(token=='#'){
+		next_token();
+		if(is_identifier(token)){
+			CodeGen(WRITE, token, EMPTY_FIELD, EMPTY_FIELD);
 			next_token();
-			var = variable();
-			CodeGen(WRITE, var, EMPTY_FIELD, EMPTY_FIELD);
 			return;
-		default:
+		}else{
 			ERROR("Symbol %c unknown\n", token);
 			exit(EXIT_FAILURE);
+		}
+	}else{
+		ERROR("Symbol %c unknown\n", token);
+		exit(EXIT_FAILURE);
 	}
 	/* YOUR CODE GOES HERE */
 }
@@ -242,18 +239,6 @@ static void stmt()
 
 static void morestmts()
 {
-	// printf("token %c\n", token);
-	// c
-	// if(token == ';'){
-	// 	next_token();
-	// 	stmtlist();
-	// 	return;
-	// }else if((int)token==229){
-	// 	return;
-	// }else{
-	// 	ERROR("Symbol %c unknown\n", token);
-	// 	exit(EXIT_FAILURE);
-	// }
 	switch(token){
 		case ';':
 			next_token();
