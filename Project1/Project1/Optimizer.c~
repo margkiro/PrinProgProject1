@@ -30,6 +30,7 @@ int main()
 				int val2 = tmp->next->field2;
 				int res = val1 + val2;
 				tmp->field2 = res;
+				tmp->field1 = tmp->next->next->field1;
 				delete(tmp);
 				tmp = head;
 			}else if(tmp->next->next->opcode == SUB){
@@ -37,6 +38,7 @@ int main()
 				int val2 = tmp->next->field2;
 				int res = val1 - val2;
 				tmp->field2 = res;
+				tmp->field1 = tmp->next->next->field3;
 				delete(tmp);
 				tmp = head;
 			}else if(tmp->next->next->opcode == MUL){
@@ -44,6 +46,7 @@ int main()
 				int val2 = tmp->next->field2;
 				int res = val1 * val2;
 				tmp->field2 = res;
+				tmp->field1 = tmp->next->next->field3;
 				delete(tmp);
 				tmp = head;
 			}else{

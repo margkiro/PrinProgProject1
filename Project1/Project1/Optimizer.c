@@ -8,6 +8,9 @@ void delete(Instruction *node){
 	Instruction *tmp;
 	tmp = node->next;
 	node->next = tmp->next->next;
+	Instruction *tmp2;
+	tmp2 = node->next;
+	tmp2->prev = node;
 	free(tmp->next);
 	free(tmp);
 }
